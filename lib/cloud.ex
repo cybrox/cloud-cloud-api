@@ -1,18 +1,18 @@
 defmodule Cloud do
   @moduledoc """
-  Documentation for Cloud.
+  Cloud core module, provides meta functionality
   """
 
-  @doc """
-  Hello world.
+  @version Mix.Project.config[:version]
 
-  ## Examples
+  def version do
+    @version
+  end
 
-      iex> Cloud.hello
-      :world
-
-  """
-  def hello do
-    :world
+  def hostname do
+    case :inet.gethostname do
+      {:ok, hostname} -> hostname
+      _ -> "unknown"
+    end
   end
 end

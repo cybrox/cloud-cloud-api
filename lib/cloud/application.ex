@@ -8,10 +8,8 @@ defmodule Cloud.Application do
   def start(_type, _args) do
     import Supervisor.Spec, warn: false
 
-    # Define workers and child supervisors to be supervised
     children = [
-      # Starts a worker by calling: Cloud.Worker.start_link(arg1, arg2, arg3)
-      # worker(Cloud.Worker, [arg1, arg2, arg3]),
+      Plug.Adapters.Cowboy.child_spec(:http, Cloud.Router, [], [port: 6660])
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
