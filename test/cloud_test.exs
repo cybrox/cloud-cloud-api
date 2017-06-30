@@ -1,6 +1,6 @@
-defmodule CloudCloudTest do
+defmodule CloudTest do
   use ExUnit.Case
-  doctest CloudCloud
+  doctest Cloud
 
   test "the truth" do
     assert 1 + 1 == 2

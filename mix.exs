@@ -1,9 +1,9 @@
-defmodule CloudCloud.Mixfile do
+defmodule Cloud.Mixfile do
   use Mix.Project
 
   def project do
     [
-      app: :cloud_cloud,
+      app: :cloud,
       version: "0.1.0",
       elixir: "~> 1.4",
       build_embedded: Mix.env == :prod,
@@ -15,7 +15,8 @@ defmodule CloudCloud.Mixfile do
 
   # Configuration for the OTP application
   def application do
-    [extra_applications: [:logger]]
+    [extra_applications: [:logger],
+     mod: {Cloud.Application, []}]
   end
 
 

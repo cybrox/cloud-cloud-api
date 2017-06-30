@@ -1,6 +1,6 @@
-defmodule CloudCloud do
+defmodule Cloud do
   @moduledoc """
-  Documentation for CloudCloud.
+  Documentation for Cloud.
   """
 
   @doc """
@@ -8,7 +8,7 @@ defmodule CloudCloud do
 
   ## Examples
 
-      iex> CloudCloud.hello
+      iex> Cloud.hello
       :world
 
   """

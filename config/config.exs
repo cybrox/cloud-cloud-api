@@ -10,11 +10,11 @@ use Mix.Config
 
 # You can configure for your application as:
 #
-#     config :cloud_cloud, key: :value
+#     config :cloud, key: :value
 #
 # And access this configuration in your application as:
 #
-#     Application.get_env(:cloud_cloud, :key)
+#     Application.get_env(:cloud, :key)
 #
 # Or configure a 3rd-party app:
 #
