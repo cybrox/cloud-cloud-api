@@ -2,7 +2,6 @@ defmodule Cloud.Router do
   use Plug.Router
 
   plug :match
-  plug BasicAuth, use_config: {:cloud, :auth}
   plug :dispatch
 
   @moduledoc """
