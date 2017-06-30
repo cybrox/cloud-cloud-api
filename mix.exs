@@ -26,7 +26,8 @@ defmodule Cloud.Mixfile do
       {:cowboy, "~> 1.1"},
       {:plug, "~> 1.3"},
       {:poison, "~> 3.1"},
-      {:httpoison, "~> 0.12.0"}
+      {:httpoison, "~> 0.12.0"},
+      {:basic_auth, "~> 2.1"}
     ]
   end
 end
