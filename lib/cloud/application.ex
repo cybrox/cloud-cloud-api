@@ -9,8 +9,6 @@ defmodule Cloud.Application do
     import Supervisor.Spec, warn: false
 
     children = [
-      Plug.Adapters.Cowboy.child_spec(:http, Cloud.Router, [], [port: 6660]),
-
       worker(Cloud.Fetcher, [])
     ]
 
