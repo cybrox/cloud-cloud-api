@@ -1,4 +1,9 @@
-defmodule Cloud.Weather do
+defmodule Cloud.Model.Weather do
+
+  @moduledoc """
+  Represents weather state as fetched from the internet
+  """
+
 
   defstruct code: nil
 
