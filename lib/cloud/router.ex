@@ -13,8 +13,4 @@ defmodule Cloud.Router do
     hostname = Cloud.hostname()
     send_resp(conn, 200, "cloud-cloud:#{version}@#{hostname}")
   end
-
-  get "/weather" do
-    send_resp(conn, 200, "hi")
-  end
 end
