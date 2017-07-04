@@ -22,10 +22,14 @@ Aside the text ping packets described below (not the ping layer ping packets), a
 Example weather packet: `[cc:1:2:0]`   
 Example color packet: `[cc:2:255,255,255:0]`
 
-
 ### Ensuring connection
 The Server offers a permanent ping/pong handler in order for the client to check its connection. The client can send a ping via websocket with an arbitrary cookie at any time and should receive a pong from the server immediately, if it is still connected.    
 The client can either send a proper websocket ping frame with an appropriate cookie, or just send a text packet with the content `ping` and should receive a text packet with the content `pong`.
+
+### Todo
+- Make weather fetcher actually call dispatcher
+- Implement timeout for calling dispatcher while it's awaiting connection
+- Add cowboy+plug for simple webinterface
 
 ----
 **note**: _cloud_ == _butt_ 
