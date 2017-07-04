@@ -9,7 +9,8 @@ defmodule Cloud.Application do
     import Supervisor.Spec, warn: false
 
     children = [
-      worker(Cloud.Fetcher, [])
+      worker(Cloud.Fetcher, []),
+      worker(Cloud.Dispatcher, [])
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
