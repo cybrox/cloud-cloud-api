@@ -34,6 +34,7 @@ defmodule Cloud.Dispatcher do
     client = Socket.Web.accept!(state.server)
     client |> Socket.Web.accept!()
 
+    Logger.debug "New connection from #{client.headers["origin"]}"
     Process.send(self(), :await_auth, [:nosuspend])
     {:noreply, %{state | client: client}}
   end
@@ -42,11 +43,13 @@ defmodule Cloud.Dispatcher do
     auth_secret = Application.get_env(:cloud, :auth_secret)
     case Socket.Web.recv!(state.client) do
       {:text, ^auth_secret} ->
+        Logger.debug "Successfully established connection"
         Socket.Web.send!(state.client, {:text, "ok"})
-        Cloud.PingPong.set_client(state.client)
+        Cloud.Acceptor.set_client(state.client)
         {:noreply, %{state | open: true}}
 
       _ ->
+        Logger.debug "Failed to establish connection"
         Socket.Web.close(state.client, :handshake)
         Process.send(self(), :await_connect, [:nosuspend])
         {:noreply, %{state | open: false}}
@@ -64,7 +67,10 @@ defmodule Cloud.Dispatcher do
   end
 
   def handle_cast(:close_connection, state) do
-    IO.puts "CLOSING!!"
+    Logger.debug "Closing current client connection"
+    Socket.Web.close(state.client)
+    Process.send(self(), :await_connect, [:nosuspend])
+    {:noreply, %{state | client: nil}}
   end
 
 

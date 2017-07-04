@@ -10,7 +10,7 @@ defmodule Cloud.Application do
 
     children = [
       worker(Cloud.Fetcher, []),
-      worker(Cloud.PingPong, []),
+      worker(Cloud.Acceptor, []),
       worker(Cloud.Dispatcher, [])
     ]
 
