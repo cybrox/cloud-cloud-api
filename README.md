@@ -13,6 +13,8 @@ The display packets transmitted from the server contain the following informatio
 * `weather` Only in _weather_ mode: The current weather code, `1` - `10`
 * `color` Only in _manual_ mode: The RGB value of the custom color to set
 
+### Ensuring connection
+The Server offers a permanent ping/pong handler in order for the client to check its connection. The client can send a ping via websocket with an arbitrary cookie at any time and should receive a pong from the server immediately, if it is still connected.
 
 ----
 **note**: _cloud_ == _butt_

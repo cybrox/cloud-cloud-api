@@ -15,6 +15,10 @@ defmodule Cloud.Dispatcher do
     GenServer.start_link(__MODULE__, @default_state, name: __MODULE__)
   end
 
+  def close_connection do
+    GenServer.cast(__MODULE__, :close_connection)
+  end
+
 
   def init(state) do
     wsport = Application.get_env(:cloud, :device_port)
@@ -39,6 +43,7 @@ defmodule Cloud.Dispatcher do
     case Socket.Web.recv!(state.client) do
       {:text, ^auth_secret} ->
         Socket.Web.send!(state.client, {:text, "ok"})
+        Cloud.PingPong.set_client(state.client)
         {:noreply, %{state | open: true}}
 
       _ ->
@@ -50,9 +55,20 @@ defmodule Cloud.Dispatcher do
 
   def handle_call({:send_display, display}, _from, state) do
     with true <- state.open do
+      display_info = serialize_display_information(display)
+      Socket.Web.send!(state.client, {:text, display_info})
       {:reply, :ok, state}
     else
-      {:reply, :notopen, state}
+      _ -> {:reply, :notopen, state}
     end
+  end
+
+  def handle_cast(:close_connection, state) do
+    IO.puts "CLOSING!!"
+  end
+
+
+  defp serialize_display_information(display) do
+    display
   end
 end
