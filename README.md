@@ -14,7 +14,8 @@ The display packets transmitted from the server contain the following informatio
 * `color` Only in _manual_ mode: The RGB value of the custom color to set
 
 ### Ensuring connection
-The Server offers a permanent ping/pong handler in order for the client to check its connection. The client can send a ping via websocket with an arbitrary cookie at any time and should receive a pong from the server immediately, if it is still connected.
+The Server offers a permanent ping/pong handler in order for the client to check its connection. The client can send a ping via websocket with an arbitrary cookie at any time and should receive a pong from the server immediately, if it is still connected.    
+The client can either send a proper websocket ping frame with an appropriate cookie, or just send a text packet with the content `ping` and should receive a text packet with the content `pong`.
 
 ----
 **note**: _cloud_ == _butt_

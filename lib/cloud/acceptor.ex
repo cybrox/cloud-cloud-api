@@ -33,6 +33,10 @@ defmodule Cloud.Acceptor do
           Socket.Web.pong!(state.client, cookie)
           state
 
+        {:text, "ping"} ->
+          Socket.Web.send(state.client, {:text, "pong"})
+          state
+
         :close ->
           Cloud.Dispatcher.close_connection()
           %{state | client: nil}
