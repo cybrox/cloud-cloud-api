@@ -2,6 +2,8 @@ defmodule Cloud.Dispatcher do
   use GenServer
 
   require Logger
+  alias Cloud.Model.DisplayManual
+  alias Cloud.Model.DisplayWeather
 
   @moduledoc """
   Dispatcher for socket communication with the cloud-cloud.
@@ -13,6 +15,10 @@ defmodule Cloud.Dispatcher do
 
   def start_link do
     GenServer.start_link(__MODULE__, @default_state, name: __MODULE__)
+  end
+
+  def send_display(display) do
+    :ok = GenServer.call(__MODULE__, {:send_display, display})
   end
 
   def close_connection do
@@ -74,7 +80,11 @@ defmodule Cloud.Dispatcher do
   end
 
 
-  defp serialize_display_information(display) do
-    display
+  defp serialize_display_information(%DisplayWeather{}=info) do
+    "[cc:1:#{info.weather}:#{info.intensity}]"
+  end
+
+  defp serialize_display_information(%DisplayManual{}=info) do
+    "[cc:1:#{info.color}:#{info.pulse}]"
   end
 end
