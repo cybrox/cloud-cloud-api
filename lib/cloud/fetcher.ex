@@ -7,7 +7,7 @@ defmodule Cloud.Fetcher do
 
   @city_id "7287513"
   @minute 60 * 1000
-  @interval 1000#10 * @minute
+  @interval 10 * @minute
 
 
   def start_link do
