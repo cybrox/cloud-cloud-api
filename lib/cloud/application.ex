@@ -16,7 +16,7 @@ defmodule Cloud.Application do
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
     # for other strategies and supported options
-    opts = [strategy: :one_for_one, name: Cloud.Supervisor]
+    opts = [strategy: :one_for_all, name: Cloud.Supervisor]
     Supervisor.start_link(children, opts)
   end
 end
