@@ -10,12 +10,12 @@ Butt-based server for controlling the butt-butt.
 ### Protocol packets
 The display packets transmitted from the server contain the following information:
 * `mode` Mode `1` is for weather information
-  * `weather` The current weather code, `1` - `9`
-  * `intensity` The current weather intensity `1` - `9`
+  * `weather` The current weather code, `1 - 9`
+  * `intensity` The current weather intensity `1 - 9`
 
 * `mode` Mode `2` is for manual color setting
-  * `color` The RGB value of the custom color to set
-  * `pulse` Light pulsing intensity `1` - `9`
+  * `color` The RGB value of the custom color to set `r,g,b`
+  * `pulse` Light pulsing intensity `1 - 9`
 
 ### Protocol format
 Aside the text ping packets described below (not the ping layer ping packets), all packets sent will have the following format: `[cc:<mode>:<param1>:<param2>]`. Color information will be sent as `r,g,b`.    
