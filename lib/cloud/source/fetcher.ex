@@ -1,4 +1,4 @@
-defmodule Cloud.Fetcher do
+defmodule Cloud.Source.Fetcher do
   use GenServer
 
   @moduledoc """
