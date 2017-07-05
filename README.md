@@ -27,10 +27,8 @@ The Server offers a permanent ping/pong handler in order for the client to check
 The client can either send a proper websocket ping frame with an appropriate cookie, or just send a text packet with the content `ping` and should receive a text packet with the content `pong`.
 
 ### Todo
-- Break websocket handling into own `one-for-all` supervision tree
 - Make weather fetcher actually call dispatcher
-- Implement timeout for calling dispatcher while it's awaiting connection
-- Add cowboy+plug for simple webinterface
+- Add off button to webinterface
 
 ----
 **note**: _cloud_ == _butt_ 
