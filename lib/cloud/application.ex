@@ -10,7 +10,8 @@ defmodule Cloud.Application do
 
     children = [
       supervisor(Cloud.Source, []),
-      supervisor(Cloud.Socket, [])
+      supervisor(Cloud.Socket, []),
+      supervisor(Cloud.Web, [])
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html

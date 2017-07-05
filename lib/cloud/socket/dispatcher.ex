@@ -29,7 +29,7 @@ defmodule Cloud.Socket.Dispatcher do
 
   def init(state) do
     wsport = Application.get_env(:cloud, :device_port)
-    Logger.info "Awaiting connection on wss:#{wsport}"
+    Logger.info "Awaiting connection on ws:#{wsport}"
 
     server = Socket.Web.listen!(wsport)
     Process.send(self(), :await_connect, [:nosuspend])
