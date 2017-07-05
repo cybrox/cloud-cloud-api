@@ -5,6 +5,8 @@ defmodule Cloud.Source.Fetcher do
   Feches weather from an external source and provides it when requested
   """
 
+  alias Cloud.Source.State
+
   @city_id "7287513"
   @minute 60 * 1000
   @interval 10 * @minute
@@ -40,6 +42,8 @@ defmodule Cloud.Source.Fetcher do
   end
 
   defp fetch_weather do
-    IO.puts "lol"
+    if State.get_mode == :weather do
+      IO.puts "weather!"
+    end
   end
 end

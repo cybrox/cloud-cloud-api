@@ -1,6 +1,9 @@
 defmodule Cloud.Web.Router do
   use Plug.Router
 
+  require Logger
+  alias Cloud.Source.State
+
   plug Plug.Static, at: "/", from: {:cloud, "priv/static"}
   plug :match
   plug :dispatch
@@ -21,7 +24,15 @@ defmodule Cloud.Web.Router do
 
   # API endpoint for webinterface
   post "/config" do
-    send_resp(conn, 200, "ok")
+    {:ok, params, conn} = Plug.Parsers.JSON.parse(conn, "application", "json", %{}, json_decoder: Poison)
+
+    case params["mode"] do
+      1 -> State.set_state(:weather, params)
+      2 -> State.set_state(:manual, params)
+      _ -> Logger.error "Received unknown mode"
+    end
+
+    send_resp(conn, 200, "")
   end
 
   # Catchall endpoint
