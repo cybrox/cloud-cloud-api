@@ -10,13 +10,12 @@ defmodule Cloud.Application do
 
     children = [
       worker(Cloud.Fetcher, []),
-      worker(Cloud.Acceptor, []),
-      worker(Cloud.Dispatcher, [])
+      supervisor(Cloud.Socket, [])
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
     # for other strategies and supported options
-    opts = [strategy: :one_for_all, name: Cloud.Supervisor]
+    opts = [strategy: :one_for_one, name: Cloud.Supervisor]
     Supervisor.start_link(children, opts)
   end
 end

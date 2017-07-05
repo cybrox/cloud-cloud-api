@@ -1,7 +1,8 @@
-defmodule Cloud.Dispatcher do
+defmodule Cloud.Socket.Dispatcher do
   use GenServer
 
   require Logger
+  alias Cloud.Socket.Acceptor
   alias Cloud.Model.DisplayManual
   alias Cloud.Model.DisplayWeather
 
@@ -51,7 +52,7 @@ defmodule Cloud.Dispatcher do
       {:text, ^auth_secret} ->
         Logger.debug "Successfully established connection"
         Socket.Web.send!(state.client, {:text, "ok"})
-        Cloud.Acceptor.set_client(state.client)
+        Acceptor.set_client(state.client)
         {:noreply, %{state | open: true}}
 
       _ ->

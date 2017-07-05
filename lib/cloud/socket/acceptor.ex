@@ -1,7 +1,8 @@
-defmodule Cloud.Acceptor do
+defmodule Cloud.Socket.Acceptor do
   use GenServer
 
   require Logger
+  alias Cloud.Socket.Dispatcher
 
   @moduledoc """
   The acceptor module will receive a client connection from the dispatcher once
@@ -38,7 +39,7 @@ defmodule Cloud.Acceptor do
           state
 
         :close ->
-          Cloud.Dispatcher.close_connection()
+          Dispatcher.close_connection()
           %{state | client: nil}
 
         _ ->
