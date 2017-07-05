@@ -14,7 +14,8 @@ defmodule Cloud.Source do
 
   def init([]) do
     children = [
-      worker(Cloud.Source.Fetcher, [])
+      worker(Cloud.Source.Fetcher, []),
+      worker(Cloud.Source.State, [])
     ]
 
     supervise(children, strategy: :one_for_one)

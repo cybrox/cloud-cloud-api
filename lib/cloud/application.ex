@@ -9,7 +9,7 @@ defmodule Cloud.Application do
     import Supervisor.Spec, warn: false
 
     children = [
-      worker(Cloud.Fetcher, []),
+      supervisor(Cloud.Source, []),
       supervisor(Cloud.Socket, [])
     ]
 
