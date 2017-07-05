@@ -6,6 +6,6 @@ defmodule Cloud.Model.DisplayWeather do
   """
 
 
-  defstruct mode: 1, weather: nil, intensity: nil
+  defstruct weather: nil, intensity: nil
 
 end

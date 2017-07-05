@@ -70,6 +70,7 @@ body {
     border: 1px solid #604A5F;
     box-shadow: none;
     font-weight: normal;
+    transition: background 0.2s ease-in-out;
   }
 
     .mode-button.active {
@@ -95,6 +96,7 @@ body {
 #color-select {
   width: 100%;
   height: 50%;
+  margin: 0 0 10% 0;
 }
 
 .color-slider-wrapper {
@@ -144,3 +146,13 @@ body {
     #color-g + .rangeslider .rangeslider__fill { background: #47F344; }
     #color-b + .rangeslider .rangeslider__fill { background: #4447F3; }
 
+#color-preview {
+  display: none;
+  width: 20%;
+  height: 5%;
+  margin: 0 40%;
+  background: black;
+  border-radius: 3px;
+  border: 1px solid #aaa;
+  opacity: 0.6;
+}

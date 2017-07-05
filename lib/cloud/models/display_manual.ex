@@ -6,6 +6,6 @@ defmodule Cloud.Model.DisplayManual do
   """
 
 
-  defstruct mode: 2, color: nil, pulse: nil
+  defstruct color: nil, pulse: nil
 
 end

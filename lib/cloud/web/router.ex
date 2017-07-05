@@ -24,8 +24,8 @@ defmodule Cloud.Web.Router do
 
   # API endpoint for webinterface
   get "/config" do
-    current_mode = Cloud.Source.State.get_mode()
-    send_resp(conn, 200, Poison.encode!(%{mode: current_mode}))
+    current_state = Cloud.Source.State.get_state()
+    send_resp(conn, 200, Poison.encode!(current_state))
   end
 
   # API endpoint for webinterface

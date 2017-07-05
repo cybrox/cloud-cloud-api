@@ -1,10 +1,12 @@
 function sendConfigurationRequest(parameters) {
-  console.log(parameters);
-  return;
+  console.log("Sending updates to server!");
+
   $.ajax({
     type: "POST",
     url: "/config",
-    data: parameters
+    data: JSON.stringify(parameters),
+    contentType: "application/json",
+    dataType: 'json'
   });
 }
 
@@ -26,14 +28,21 @@ function setManualDisplay(color, pulse) {
 
 function setWebinterfaceMode(mode, initial) {
   if (mode == "weather") {
-    $('#color-select').hide();
+    if (initial) {
+      $('#color-select').hide();
+      $('#color-preview').hide();
+    } else {
+      $('#color-select').fadeOut('fast');
+      $('#color-preview').fadeOut('fast');
+    }
     $('#mode-w').addClass('active');
     $('#mode-m').removeClass('active');
     if (!initial) setWeatherDisplay(0, 0);
   }
 
   if (mode == "manual") {
-    $('#color-select').show();
+    $('#color-select').fadeIn('fast');
+    $('#color-preview').fadeIn('fast');
     $('#mode-w').removeClass('active');
     $('#mode-m').addClass('active');
     if (!initial) setManualDisplay(getColorSliders(), 0);
@@ -48,14 +57,22 @@ function getColorSliders() {
   return r + ',' + g + ',' + b;
 }
 
+function setColorSliders(color) {
+  var colors = color.split(',');
+  $('#color-r').val(colors[0]).change();
+  $('#color-g').val(colors[1]).change();
+  $('#color-b').val(colors[2]).change();
+}
+
+function updatePreview(color) {
+  $('#color-preview').css('background', 'rgba(' + color + ',1)');
+}
+
 
 $(document).ready(function() {
   // Set up rangeslider sliders
+  var willDebounceChange = false
   $('input[type="range"]').rangeslider({polyfill: false});
-
-  // Set up button actions
-  $('#mode-w').click(function() { setWebinterfaceMode('weather', false); });
-  $('#mode-m').click(function() { setWebinterfaceMode('manual', false); });
 
   // Load configuration from server
   $.get("/config", function(payload){
@@ -64,9 +81,28 @@ $(document).ready(function() {
     // Set mode and range sliders to server value
     setWebinterfaceMode(configuration.mode, true);
 
+    // Set range sliders to color value
+    if (configuration.manual.color) {
+      setColorSliders(configuration.manual.color);
+      updatePreview(configuration.manual.color);
+    }
+
+    // Set up listener for slider changes
+    $('input[type="range"]').change(function() {
+      if (willDebounceChange == false) {
+        updatePreview(getColorSliders());
+        setManualDisplay(getColorSliders(), 0);
+      }
+
+      willDebounceChange = true;
+      window.setTimeout(function() { willDebounceChange = false; }, 500);
+    });
+
+    // Set up button actions
+    $('#mode-w').click(function() { setWebinterfaceMode('weather', false); });
+    $('#mode-m').click(function() { setWebinterfaceMode('manual', false); });
+
     // Show webinterface content
     $('#content').css('opacity', '1');
-
-    
   });
 });
