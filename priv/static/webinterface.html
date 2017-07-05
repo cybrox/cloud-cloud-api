@@ -1,10 +1,43 @@
 <html>
   <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <link href="/vendor/slider.css" rel="stylesheet" />
+    <link href="/script/webinterface.css" rel="stylesheet" />
+
     <title>Cloud-Cloud Webinterface</title>
   </head>
 
   <body>
+    <section id="weather-control">
+      <div id="cloud-header">
+        <h1>Butt-Butt</h1>
+      </div>
+
+      <div id="content">
+        <div id="button-wrapper">
+          <button class="mode-button mode-button-left" id="mode-w">Weather</button>
+          <button class="mode-button mode-button-right" id="mode-m">Manual</button>
+        </div>
+
+        <div id="color-select">
+          <div class="color-slider-wrapper">
+            <div class="color-slider">
+              <input id="color-r" type="range" min="0" max="255" value="255" data-orientation="vertical" />
+            </div>
+            <div class="color-slider">
+              <input id="color-g" type="range" min="0" max="255" value="255" data-orientation="vertical" />
+            </div>
+            <div class="color-slider">
+              <input id="color-b" type="range" min="0" max="255" value="255" data-orientation="vertical" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <script src="/vendor/jquery.min.js"></script>
+    <script src="/vendor/slider.min.js"></script>
     <script src="/script/webinterface.js"></script>
   </body>
 </html>

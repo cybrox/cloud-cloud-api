@@ -23,6 +23,12 @@ defmodule Cloud.Web.Router do
   end
 
   # API endpoint for webinterface
+  get "/config" do
+    current_mode = Cloud.Source.State.get_mode()
+    send_resp(conn, 200, Poison.encode!(%{mode: current_mode}))
+  end
+
+  # API endpoint for webinterface
   post "/config" do
     {:ok, params, conn} = Plug.Parsers.JSON.parse(conn, "application", "json", %{}, json_decoder: Poison)
 
