@@ -2,9 +2,8 @@ defmodule Cloud.Socket.Dispatcher do
   use GenServer
 
   require Logger
+  alias Cloud.Source.State
   alias Cloud.Socket.Acceptor
-  alias Cloud.Model.DisplayManual
-  alias Cloud.Model.DisplayWeather
 
   @moduledoc """
   Dispatcher for socket communication with the cloud-cloud.
@@ -51,7 +50,9 @@ defmodule Cloud.Socket.Dispatcher do
     case Socket.Web.recv!(state.client) do
       {:text, ^auth_secret} ->
         Logger.debug "Successfully established connection"
+        display_info = serialize_display_information(State.get_state())
         Socket.Web.send!(state.client, {:text, "ok"})
+        Socket.Web.send!(state.client, {:text, display_info})
         Acceptor.set_client(state.client)
         {:noreply, %{state | open: true}}
 
@@ -81,7 +82,7 @@ defmodule Cloud.Socket.Dispatcher do
   end
 
 
-  defp serialize_display_information(%{mode: :off}=params) do
+  defp serialize_display_information(%{mode: :off}) do
     "[cc:0:?:?]"
   end
 
