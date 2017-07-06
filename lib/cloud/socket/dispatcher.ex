@@ -67,6 +67,7 @@ defmodule Cloud.Socket.Dispatcher do
   def handle_cast({:send_display_state, dispay_state}, state) do
     with true <- state.open do
       display_info = serialize_display_information(dispay_state)
+      Logger.debug "Sending display state #{display_info}"
       Socket.Web.send!(state.client, {:text, display_info})
       {:noreply, state}
     else
