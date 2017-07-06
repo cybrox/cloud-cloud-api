@@ -26,6 +26,10 @@ function setManualDisplay(color, pulse) {
   });
 }
 
+function setOffDisplay() {
+  sendConfigurationRequest({ mode: 0 });
+}
+
 function setWebinterfaceMode(mode, initial) {
   if (mode == "weather") {
     if (initial) {
@@ -37,6 +41,7 @@ function setWebinterfaceMode(mode, initial) {
     }
     $('#mode-w').addClass('active');
     $('#mode-m').removeClass('active');
+    $('#mode-o').removeClass('active');
     if (!initial) setWeatherDisplay(0, 0);
   }
 
@@ -45,7 +50,17 @@ function setWebinterfaceMode(mode, initial) {
     $('#color-preview').fadeIn('fast');
     $('#mode-w').removeClass('active');
     $('#mode-m').addClass('active');
+    $('#mode-o').removeClass('active');
     if (!initial) setManualDisplay(getColorSliders(), 0);
+  }
+
+  if (mode == "off") {
+    $('#color-select').fadeOut('fast');
+    $('#color-preview').fadeOut('fast');
+    $('#mode-w').removeClass('active');
+    $('#mode-m').removeClass('active');
+    $('#mode-o').addClass('active');
+    if (!initial) setOffDisplay();
   }
 }
 
@@ -101,6 +116,7 @@ $(document).ready(function() {
     // Set up button actions
     $('#mode-w').click(function() { setWebinterfaceMode('weather', false); });
     $('#mode-m').click(function() { setWebinterfaceMode('manual', false); });
+    $('#mode-o').click(function() { setWebinterfaceMode('off', false); });
 
     // Show webinterface content
     $('#content').css('opacity', '1');
