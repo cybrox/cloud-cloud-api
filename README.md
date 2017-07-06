@@ -28,7 +28,7 @@ The display packets transmitted from the server contain the following informatio
 
 * `mode` Mode `1` is for weather information
   * `weather` The current weather code, `1 - 9`
-  * `intensity` The current weather intensity `1 - 9`
+  * `intensity` The current weather intensity `1 - 9` (can be float for _sunrise_/_sunset_)
 
 * `mode` Mode `2` is for manual color setting
   * `color` The RGB value of the custom color to set `r,g,b`

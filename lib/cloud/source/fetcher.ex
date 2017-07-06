@@ -86,15 +86,15 @@ defmodule Cloud.Source.Fetcher do
       current_time > sunrise_start && current_time < sunrise ->
         abs_end = sunrise - sunrise_start;
         abs_cur = current_time - sunrise_start;
-        %{weather: 1, intensity: (abs_cur / abs_end) * 10}
+        %{weather: 1, intensity: Float.ceil((abs_cur / abs_end) * 10, 2)}
       current_time > sunset && current_time < sunset_end ->
         abs_end = sunset_end - sunset;
         abs_cur = current_time - sunset;
-        %{weather: 2, intensity: (abs_cur / abs_end) * 10}
+        %{weather: 2, intensity: Float.ceil((abs_cur / abs_end) * 10, 2)}
       true ->
         %{weather: weather, intensity: intensity}
     end
-
+    
     State.set_state(:weather, weather_info)
   end
 end
