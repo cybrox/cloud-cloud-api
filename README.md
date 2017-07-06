@@ -2,8 +2,8 @@
 Cloud-based server for controlling the cloud-cloud.
 
 ### Protocol flow
-* The cloud-cloud connects to the cloud-cloud API via `ws://` on `device_port` (_6661_)
-* The cloud-cloud is expected to send the `auth_secret` to the server (_cloud-my-butt_)
+* The cloud-cloud connects to the cloud-cloud API via `ws://` on `device_port`
+* The cloud-cloud is expected to send the `auth_secret` to the server
 * When this "handshake" has been successful, the cloud-cloud API will send `ok`
 * Right after sending the `ok` packet, the server will also send its current state
 * After this, the API will send information to the cloud-cloud, whenever changes occur. The device only needs to ensure that connection is established, all display information will be broadcasted as packets from the server.
