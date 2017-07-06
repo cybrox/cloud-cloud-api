@@ -27,7 +27,9 @@ defmodule Cloud.Mixfile do
       {:plug, "~> 1.3"},
       {:poison, "~> 3.1"},
       {:httpoison, "~> 0.12.0"},
-      {:socket, "~> 0.3.12"}
+      {:socket, "~> 0.3.12"},
+
+      {:distillery, "~> 1.4"}
     ]
   end
 end
