@@ -11,6 +11,7 @@ body {
   margin: 0;
   padding: 0;
   background: #402D2F;
+  overflow-y: hidden;
 }
 
 #weather-control {
