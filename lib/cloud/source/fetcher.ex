@@ -10,6 +10,7 @@ defmodule Cloud.Source.Fetcher do
   @city_id "7287513"
   @minute 60 * 1000
   @interval 10 * @minute
+  @initdelay 10_000
 
 
   def start_link do
@@ -22,7 +23,7 @@ defmodule Cloud.Source.Fetcher do
 
 
   def init(state) do
-    run_self_after_delay()
+    Process.send_after(self(), :fetch_weather, @initdelay)
     {:ok, state}
   end
 
@@ -44,6 +45,7 @@ defmodule Cloud.Source.Fetcher do
   defp fetch_weather do
     if State.get_mode == :weather do
       IO.puts "weather!"
+      #https://gist.githubusercontent.com/cybrox/09169ffa3691c5ab27e193b4d0cbc79a/raw/50fe1154d7c6010e016e0906902e1a4023f90bad/test.json
     end
   end
 end
