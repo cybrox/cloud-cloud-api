@@ -3,6 +3,7 @@ defmodule Cloud.Source.State do
 
   alias Cloud.Model.DisplayWeather
   alias Cloud.Model.DisplayManual
+  alias Cloud.Socket.Dispatcher
 
   @moduledoc """
   Keeper of the current cloud-cloud state.
@@ -48,16 +49,19 @@ defmodule Cloud.Source.State do
 
   def handle_cast({:set_off}, state) do
     {:noreply, %{state | mode: :off}}
+    |> send_state_to_dispatcher()
   end
 
   def handle_cast({:set_weather, params}, state) do
     state = %{state | mode: :weather}
     cast_weather_with(state, params)
+    |> send_state_to_dispatcher()
   end
 
   def handle_cast({:set_manual, params}, state) do
     state = %{state | mode: :manual}
     cast_manual_with(state, params)
+    |> send_state_to_dispatcher()
   end
 
 
@@ -68,4 +72,9 @@ defmodule Cloud.Source.State do
   defp cast_manual_with(state, %{color: nil, pulse: nil}), do: {:noreply, state}
   defp cast_manual_with(state, %{color: c, pulse: p}), do: {:noreply, %{state | manual: %DisplayManual{color: c, pulse: p}}}
   defp cast_manual_with(state, _), do: {:noreply, state}
+
+  defp send_state_to_dispatcher({_type, state}=response) do
+    Dispatcher.send_display_state(state)
+    response
+  end
 end

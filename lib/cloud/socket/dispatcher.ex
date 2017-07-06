@@ -18,8 +18,8 @@ defmodule Cloud.Socket.Dispatcher do
     GenServer.start_link(__MODULE__, @default_state, name: __MODULE__)
   end
 
-  def send_display(display) do
-    :ok = GenServer.call(__MODULE__, {:send_display, display})
+  def send_display_state(state) do
+    GenServer.cast(__MODULE__, {:send_display_state, state})
   end
 
   def close_connection do
@@ -63,13 +63,13 @@ defmodule Cloud.Socket.Dispatcher do
     end
   end
 
-  def handle_call({:send_display, display}, _from, state) do
+  def handle_cast({:send_display_state, dispay_state}, state) do
     with true <- state.open do
-      display_info = serialize_display_information(display)
+      display_info = serialize_display_information(dispay_state)
       Socket.Web.send!(state.client, {:text, display_info})
-      {:reply, :ok, state}
+      {:noreply, state}
     else
-      _ -> {:reply, :notopen, state}
+      _ -> {:noreply, state}
     end
   end
 
@@ -81,11 +81,20 @@ defmodule Cloud.Socket.Dispatcher do
   end
 
 
-  defp serialize_display_information(%DisplayWeather{}=info) do
-    "[cc:1:#{info.weather}:#{info.intensity}]"
+  defp serialize_display_information(%{mode: :off}=params) do
+    "[cc:0:?:?]"
   end
 
-  defp serialize_display_information(%DisplayManual{}=info) do
-    "[cc:1:#{info.color}:#{info.pulse}]"
+  defp serialize_display_information(%{mode: :weather}=params) do
+    "[cc:1:#{params.weather.weather}:#{params.weather.intensity}]"
+  end
+
+  defp serialize_display_information(%{mode: :manual}=params) do
+    "[cc:2:#{params.manual.color}:#{params.manual.pulse}]"
+  end
+
+  defp serialize_display_information(_) do
+    Logger.error "Received invalid display information"
+    ""
   end
 end
