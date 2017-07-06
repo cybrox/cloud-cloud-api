@@ -9,9 +9,10 @@ defmodule Cloud.Source.Fetcher do
   alias Cloud.Source.State
   alias Cloud.Weather
 
-  @minute 60 * 1000
-  @interval 10 * @minute
-  @initdelay 10_000
+  @fetch_interval 10 * (60 * 1000)
+  @initial_delay 10_000
+
+  @sun_transition_duration 40 * 60#s
 
   @city_id "7287513"
   @api_url "https://gist.githubusercontent.com/cybrox/09169ffa3691c5ab27e193b4d0cbc79a/raw/50fe1154d7c6010e016e0906902e1a4023f90bad/test.json"
@@ -28,7 +29,7 @@ defmodule Cloud.Source.Fetcher do
 
 
   def init(state) do
-    Process.send_after(self(), :fetch_weather, @initdelay)
+    Process.send_after(self(), :fetch_weather, @initial_delay)
     {:ok, state}
   end
 
@@ -44,7 +45,7 @@ defmodule Cloud.Source.Fetcher do
 
 
   defp run_self_after_delay do
-    Process.send_after(self(), :fetch_weather, @interval)
+    Process.send_after(self(), :fetch_weather, @fetch_interval)
   end
 
   defp fetch_weather do
@@ -67,7 +68,7 @@ defmodule Cloud.Source.Fetcher do
     end
   end
 
-  defp parse_weather_data(weather_code, sunrise, sunset, cloudiness) do
+  def parse_weather_data(weather_code, sunrise, sunset, cloudiness) do
     %{weather: weather, intensity: intensity} = Weather.get_weather_for_code(weather_code)
 
     # Respect cloudiness in cloudy skies
@@ -77,8 +78,23 @@ defmodule Cloud.Source.Fetcher do
     end
 
     # Override weather, if we're in sunset/sunrise time
-    
+    current_time = :os.system_time(:seconds)
+    sunrise_start = sunrise - @sun_transition_duration;
+    sunset_end = sunset + @sun_transition_duration;
 
-    State.set_state(:weather, %{weather: weather, intensity: intensity})
+    weather_info = cond do
+      current_time > sunrise_start && current_time < sunrise ->
+        abs_end = sunrise - sunrise_start;
+        abs_cur = current_time - sunrise_start;
+        %{weather: 1, intensity: (abs_cur / abs_end) * 10}
+      current_time > sunset && current_time < sunset_end ->
+        abs_end = sunset_end - sunset;
+        abs_cur = current_time - sunset;
+        %{weather: 2, intensity: (abs_cur / abs_end) * 10}
+      true ->
+        %{weather: weather, intensity: intensity}
+    end
+
+    State.set_state(:weather, weather_info)
   end
 end
