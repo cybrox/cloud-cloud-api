@@ -1,5 +1,12 @@
-# cloud-cloud-server
-Cloud-based server for controlling the cloud-cloud.
+# cloud-cloud-api
+This is the server side api implementation for our cloud connected cloud, a project inspired by Sparkfun's [cloud-cloud](https://learn.sparkfun.com/tutorials/led-cloud-connected-cloud) but reimagined to using a custom server software that potentially allows implementing a lot more features in the future.
+
+Basically, instead of handling everything on the ESP32 and adding an app for manual control via a third party service, we control data abstraction and manual control on the server side, providing a mobile-friendly webinterface. The weather data used is coming from [openweathermap](https://openweathermap.org/)
+
+### The idea
+The server is running constantly, its state is reset when it is restarted. The _cloud-cloud_ will connect to the server via a websocket connection, perform a pseudo-handshake and will receive display information broadcasted from the server from then on. Currently supported operation modes are `off`, `weather` and `manual`.
+
+If you want to run this on a server somewhere out in the open, you might want to proxy the `http` endpoint behind nginx, serving it via `https` and use `wss` for the socket connection.
 
 ### Protocol flow
 * The cloud-cloud connects to the cloud-cloud API via `ws://` on `device_port`
@@ -11,7 +18,7 @@ Cloud-based server for controlling the cloud-cloud.
 Here is an example protocol flow of a client registering, performing a valid handshake, receiving initial state information, sending a ping and then receiving some further state information:
 ```
 <connection established>
-C > cloud-my-butt
+C > auth-secret
 S > ok
 S > [cc:0:?:?]
 C > ping
