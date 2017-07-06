@@ -14,10 +14,6 @@ defmodule Cloud.Source.Fetcher do
 
   @sun_transition_duration 40 * 60#s
 
-  @city_id "7287513"
-  @api_url "https://gist.githubusercontent.com/cybrox/09169ffa3691c5ab27e193b4d0cbc79a/raw/50fe1154d7c6010e016e0906902e1a4023f90bad/test.json"
-
-
 
   def start_link do
     GenServer.start_link(__MODULE__, %{code: 0}, name: __MODULE__)
@@ -51,7 +47,7 @@ defmodule Cloud.Source.Fetcher do
   defp fetch_weather do
     if State.get_mode == :weather do
       Logger.debug "Fetching weather data from online service"
-      case HTTPoison.get(@api_url) do
+      case HTTPoison.get(api_url()) do
         {:ok, response} ->
           case Poison.decode(response.body) do
             {:ok, payload} ->
@@ -96,5 +92,12 @@ defmodule Cloud.Source.Fetcher do
     end
     
     State.set_state(:weather, weather_info)
+  end
+
+  defp api_url do
+    api_loc = Application.get_env(:cloud, :city_id)
+    api_key = Application.get_env(:cloud, :api_key)
+
+    "http://api.openweathermap.org/data/2.5/weather?id=#{api_loc}&appid=#{api_key}"
   end
 end
