@@ -78,5 +78,6 @@ defmodule Cloud.Weather do
   def get_weather_for_code(960), do: %{weather: 9, intensity: 7} # storm
   def get_weather_for_code(961), do: %{weather: 9, intensity: 8} # violent storm
   def get_weather_for_code(962), do: %{weather: 9, intensity: 9} # hurricane
+  def get_weather_for_code(_),   do: %{weather: 3, intensity: 9} # unknown (-> clear sky)
 
 end
