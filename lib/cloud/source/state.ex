@@ -50,19 +50,22 @@ defmodule Cloud.Source.State do
     {:noreply, %{state | mode: :off}}
   end
 
-  def handle_cast({:set_weather, %{weather: weather, intensity: intensity}}, state) do
-    if weather == nil && intensity == nil do
-      {:noreply, %{state | mode: :weather}}
-    else
-      {:noreply, %{state | mode: :weather, weather: %DisplayWeather{weather: weather, intensity: intensity}}}
-    end
+  def handle_cast({:set_weather, params}, state) do
+    state = %{state | mode: :weather}
+    cast_weather_with(state, params)
   end
 
-  def handle_cast({:set_manual, %{color: color, pulse: pulse}}, state) do
-    if color == nil && pulse == nil do
-      {:noreply, %{state | mode: :manual}}
-    else
-      {:noreply, %{state | mode: :manual, manual: %DisplayManual{color: color, pulse: pulse}}}
-    end
+  def handle_cast({:set_manual, params}, state) do
+    state = %{state | mode: :manual}
+    cast_manual_with(state, params)
   end
+
+
+  defp cast_weather_with(state, %{weather: nil, intensity: nil}), do: {:noreply, state}
+  defp cast_weather_with(state, %{weather: w, intensity: i}), do: {:noreply, %{state | weather: %DisplayWeather{weather: w, intensity: i}}}
+  defp cast_weather_with(state, _), do: {:noreply, state}
+
+  defp cast_manual_with(state, %{color: nil, pulse: nil}), do: {:noreply, state}
+  defp cast_manual_with(state, %{color: c, pulse: p}), do: {:noreply, %{state | manual: %DisplayManual{color: c, pulse: p}}}
+  defp cast_manual_with(state, _), do: {:noreply, state}
 end
