@@ -10,6 +10,10 @@ function sendConfigurationRequest(parameters) {
   });
 }
 
+function setOffDisplay() {
+  sendConfigurationRequest({ mode: 0 });
+}
+
 function setWeatherDisplay(weather, intensity) {
   sendConfigurationRequest({
     mode: 1,
@@ -24,10 +28,6 @@ function setManualDisplay(color, pulse) {
     color: color,
     pulse: pulse
   });
-}
-
-function setOffDisplay() {
-  sendConfigurationRequest({ mode: 0 });
 }
 
 function setWebinterfaceMode(mode, initial) {
