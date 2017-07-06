@@ -55,8 +55,13 @@ function setWebinterfaceMode(mode, initial) {
   }
 
   if (mode == "off") {
-    $('#color-select').fadeOut('fast');
-    $('#color-preview').fadeOut('fast');
+    if (initial) {
+      $('#color-select').hide();
+      $('#color-preview').hide();
+    } else {
+      $('#color-select').fadeOut('fast');
+      $('#color-preview').fadeOut('fast');
+    }
     $('#mode-w').removeClass('active');
     $('#mode-m').removeClass('active');
     $('#mode-o').addClass('active');
