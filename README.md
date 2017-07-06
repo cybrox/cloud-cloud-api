@@ -56,8 +56,5 @@ The client can either send a proper websocket ping frame with an appropriate coo
 * `8` - Mist/Smoke/Sand/Dust
 * `9` - Windy
 
-### Todo
-- Make weather fetcher actually call dispatcher
-
 ----
 **note**: _cloud_ == _butt_ 
