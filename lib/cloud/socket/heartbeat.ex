@@ -8,10 +8,11 @@ defmodule Cloud.Socket.Heartbeat do
   """
 
   @heartbeat_interval 10_000
+  @initial_state %{active: false, alive: false, timer: nil}
 
 
   def start_link do
-    GenServer.start_link(__MODULE__, %{active: false, alive: false}, name: __MODULE__)
+    GenServer.start_link(__MODULE__, @initial_state, name: __MODULE__)
   end
 
   def start_heartbeat do
@@ -32,14 +33,15 @@ defmodule Cloud.Socket.Heartbeat do
   end
 
   def handle_info(:heartbeat, %{active: true}=state) do
-    case state.alive do
+    timer_reference = case state.alive do
       true ->
         Process.send_after(self(), :heartbeat, @heartbeat_interval)
       false ->
         Logger.debug "Closing socket connection, no heartbeat!"
         raise "Lost connection to client"
+        nil
     end
-    {:noreply, %{state | alive: false}}
+    {:noreply, %{state | alive: false, timer: timer_reference}}
   end
 
   def handle_info(:heartbeat, %{active: false}=state) do
@@ -54,7 +56,8 @@ defmodule Cloud.Socket.Heartbeat do
 
   def handle_cast(:stop_heartbeat, state) do
     Logger.debug "Stopping heartbeat for active connection"
-    {:noreply, %{state | active: false}}
+    Process.cancel_timer(state.timer)
+    {:noreply, %{state | active: false, timer: nil}}
   end
 
   def handle_cast(:keep_alive, state) do
