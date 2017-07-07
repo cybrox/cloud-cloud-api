@@ -80,7 +80,7 @@ defmodule Cloud.Socket.Dispatcher do
 
   def handle_cast(:close_connection, state) do
     Logger.debug "Closing current client connection"
-    Socket.Web.close(state.client, wait: false)
+    Socket.Web.close(state.client)
     Heartbeat.stop_heartbeat()
     Process.send(self(), :await_connect, [:nosuspend])
     {:noreply, %{state | client: nil}}
