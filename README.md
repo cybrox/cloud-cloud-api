@@ -63,5 +63,7 @@ The client can either send a proper websocket ping frame with an appropriate coo
 * `8` - Mist/Smoke/Sand/Dust
 * `9` - Windy
 
-----
-**note**: _cloud_ == _butt_ 
+### Webinterface
+Yes, the whole [cloud-to-butt](https://github.com/panicsteve/cloud-to-butt) thing is still funny. No, we're not immature!
+
+![screen](http://s.cybrox.eu/s/20170707084638.png)
