@@ -14,6 +14,7 @@ defmodule Cloud.Socket do
 
   def init([]) do
     children = [
+      worker(Cloud.Socket.Heartbeat, []),
       worker(Cloud.Socket.Dispatcher, []),
       worker(Cloud.Socket.Acceptor, [])
     ]

@@ -4,6 +4,7 @@ defmodule Cloud.Socket.Dispatcher do
   require Logger
   alias Cloud.Source.State
   alias Cloud.Socket.Acceptor
+  alias Cloud.Socket.Heartbeat
 
   @moduledoc """
   Dispatcher for socket communication with the cloud-cloud.
@@ -40,6 +41,7 @@ defmodule Cloud.Socket.Dispatcher do
     client = Socket.Web.accept!(state.server)
     client |> Socket.Web.accept!()
 
+    Heartbeat.start_heartbeat()
     Logger.debug "New connection from #{client.headers["origin"]}"
     Process.send(self(), :await_auth, [:nosuspend])
     {:noreply, %{state | client: client}}
@@ -58,7 +60,8 @@ defmodule Cloud.Socket.Dispatcher do
 
       _ ->
         Logger.debug "Failed to establish connection"
-        Socket.Web.close(state.client, :handshake)
+        Socket.Web.close(state.client, :handshake, wait: false)
+        Heartbeat.stop_heartbeat()
         Process.send(self(), :await_connect, [:nosuspend])
         {:noreply, %{state | open: false}}
     end
@@ -77,7 +80,8 @@ defmodule Cloud.Socket.Dispatcher do
 
   def handle_cast(:close_connection, state) do
     Logger.debug "Closing current client connection"
-    Socket.Web.close(state.client)
+    Socket.Web.close(state.client, wait: false)
+    Heartbeat.stop_heartbeat()
     Process.send(self(), :await_connect, [:nosuspend])
     {:noreply, %{state | client: nil}}
   end

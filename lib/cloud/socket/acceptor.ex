@@ -31,10 +31,12 @@ defmodule Cloud.Socket.Acceptor do
     if state.client != nil do
       new_state = case Socket.Web.recv!(state.client) do
         {:ping, cookie} ->
+          Cloud.Socket.Heartbeat.keep_alive()
           Socket.Web.pong!(state.client, cookie)
           state
 
         {:text, "ping"} ->
+          Cloud.Socket.Heartbeat.keep_alive()
           Socket.Web.send(state.client, {:text, "pong"})
           state
 
