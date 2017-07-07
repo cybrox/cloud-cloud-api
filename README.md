@@ -3,6 +3,11 @@ This is the server side api implementation for our cloud connected cloud, a proj
 
 Basically, instead of handling everything on the ESP32 and adding an app for manual control via a third party service, we control data abstraction and manual control on the server side, providing a mobile-friendly webinterface. The weather data used is coming from [openweathermap](https://openweathermap.org/)
 
+A note on the state of this project:
+* The software is fully functional, at least as far as we are aware of
+* The software will be deployed in-house, so security is not a factor
+* The software is completely untested. - Because I'm lazy.
+
 ### The idea
 The server is running constantly, its state is reset when it is restarted. The _cloud-cloud_ will connect to the server via a websocket connection, perform a pseudo-handshake and will receive display information broadcasted from the server from then on. Currently supported operation modes are `off`, `weather` and `manual`.
 
