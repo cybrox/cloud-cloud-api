@@ -19,7 +19,7 @@ defmodule Cloud.Socket do
       worker(Cloud.Socket.Acceptor, [])
     ]
 
-    supervise(children, strategy: :one_for_all)
+    supervise(children, strategy: :one_for_all, max_restarts: 20, max_seconds: 1)
   end
 
 end
