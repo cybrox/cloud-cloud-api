@@ -88,6 +88,19 @@ function updatePreview(color) {
   $('#color-preview').css('background', 'rgba(' + color + ',1)');
 }
 
+function sendDeviceReset() {
+  console.log("Sending reset to server!");
+
+  $.ajax({
+    type: "POST",
+    url: "/reset"
+  });
+}
+
+function showUpdateWindow() {
+  $('#update-picker').show();
+}
+
 
 $(document).ready(function() {
   // Set up rangeslider sliders
@@ -122,6 +135,10 @@ $(document).ready(function() {
     $('#mode-w').click(function() { setWebinterfaceMode('weather', false); });
     $('#mode-m').click(function() { setWebinterfaceMode('manual', false); });
     $('#mode-o').click(function() { setWebinterfaceMode('off', false); });
+
+    // Set up footer actions
+    $('#reset').click(function()  { sendDeviceReset(); });
+    $('#update').click(function() { showUpdateWindow(); });
 
     // Show webinterface content
     $('#content').css('opacity', '1');
