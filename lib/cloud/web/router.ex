@@ -4,6 +4,7 @@ defmodule Cloud.Web.Router do
   require Logger
   alias Cloud.Source.State
   alias Cloud.Source.Keeper
+  alias Cloud.Socket.Dispatcher
 
   plug Plug.Static, at: "/", from: {:cloud, "priv/static"}
   plug :match
@@ -43,6 +44,22 @@ defmodule Cloud.Web.Router do
     end
 
     send_resp(conn, 200, "")
+  end
+
+  # API endpoint for resetting device
+  post "/reset" do
+    Dispatcher.send_display_state(%{command: :reset})
+    send_resp(conn, 200, "OK")
+  end
+  
+  # API Endpoint for updating device
+  post "/update" do
+    Dispatcher.send_display_state(%{command: :update})
+
+    conn
+    |> put_resp_header("location", "/")
+    |> send_resp(301, "Redirecting...")
+    |> halt()
   end
 
   # Catchall endpoint
