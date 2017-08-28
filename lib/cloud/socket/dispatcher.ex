@@ -98,6 +98,14 @@ defmodule Cloud.Socket.Dispatcher do
   defp serialize_display_information(%{mode: :manual}=params) do
     "[cc:2:#{params.manual.color}:#{params.manual.pulse}]"
   end
+  
+  defp serialize_display_information(%{command: :reset}) do
+    "[cc:r:?:?]"
+  end
+    
+  defp serialize_display_information(%{command: :update}) do
+    "[cc:u:?:?]"
+  end
 
   defp serialize_display_information(_) do
     Logger.error "Received invalid display information"
