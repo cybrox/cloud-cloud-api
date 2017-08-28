@@ -8,6 +8,7 @@ defmodule Cloud.Web.Router do
 
   plug Plug.Static, at: "/", from: {:cloud, "priv/static"}
   plug :match
+  plug Plug.Parsers, parsers: [:urlencoded, :multipart]
   plug :dispatch
 
   # API redirection for serving static file on index
@@ -54,12 +55,25 @@ defmodule Cloud.Web.Router do
   
   # API Endpoint for updating device
   post "/update" do
-    Dispatcher.send_display_state(%{command: :update})
+    binfile = conn.params["binfile"]
+    if binfile != nil do
+      {:ok, info} = File.stat binfile.path
+      if Map.get(info, :size, 0) > 500_000 do
+        conn
+        |> send_resp(400, "I don't like this file!")
+        |> halt()
+      else
+        File.cp(binfile.path, "./priv/static/firmware.bin")
 
-    conn
-    |> put_resp_header("location", "/")
-    |> send_resp(301, "Redirecting...")
-    |> halt()
+        Logger.debug "Sending update request to device!"
+        Dispatcher.send_display_state(%{command: :update})
+        
+        conn
+        |> put_resp_header("location", "/")
+        |> send_resp(302, "Going back home")
+        |> halt()
+      end
+    end
   end
 
   # Catchall endpoint
