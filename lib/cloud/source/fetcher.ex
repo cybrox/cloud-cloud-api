@@ -13,6 +13,7 @@ defmodule Cloud.Source.Fetcher do
   @initial_delay 30 * 1000           # 30 seconds
 
   @sun_transition_duration 40 * 60   # 40 seconds
+  @dummy_mode true                  # Dummy mode (no online requests)
 
 
   def start_link do
@@ -25,7 +26,11 @@ defmodule Cloud.Source.Fetcher do
 
 
   def init(state) do
-    Process.send_after(self(), :fetch_weather, @initial_delay)
+    if @dummy_mode do
+      Logger.info "Starting in dummy mode, no weather requests will be sent!"
+    else
+      Process.send_after(self(), :fetch_weather, @initial_delay)
+    end
     {:ok, state}
   end
 
