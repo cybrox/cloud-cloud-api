@@ -6,6 +6,7 @@ defmodule Cloud.Web.Router do
   alias Cloud.Source.Keeper
   alias Cloud.Socket.Dispatcher
 
+  plug BasicAuth, use_config: {:cloud, :basic_auth}
   plug Plug.Static, at: "/", from: {:cloud, "priv/static"}
   plug :match
   plug Plug.Parsers, parsers: [:urlencoded, :multipart]

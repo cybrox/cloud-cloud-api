@@ -6,4 +6,10 @@ config :logger,
   backends: [:console],
   compile_time_purge_level: :debug
 
+config :cloud, basic_auth: [
+  username: "cloud-cloud",
+  password: "yourpassword",
+  realm: "cloud-cloud"
+]
+
 import_config "cloud.exs"
