@@ -3,6 +3,7 @@ defmodule Cloud.Web.Router do
 
   require Logger
   alias Cloud.Source.State
+  alias Cloud.Source.Keeper
 
   plug Plug.Static, at: "/", from: {:cloud, "priv/static"}
   plug :match
@@ -36,7 +37,7 @@ defmodule Cloud.Web.Router do
 
     case params.mode do
       0 -> State.set_state(:off, params)
-      1 -> State.set_state(:weather, params)
+      1 -> State.set_state(:weather, Keeper.get_weather())
       2 -> State.set_state(:manual, params)
       _ -> Logger.error "Received unknown mode"
     end

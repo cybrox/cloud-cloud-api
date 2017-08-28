@@ -6,7 +6,7 @@ defmodule Cloud.Source.Fetcher do
   """
 
   require Logger
-  alias Cloud.Source.State
+  alias Cloud.Source.Keeper
   alias Cloud.Weather
 
   @fetch_interval 10 * (60 * 1000)
@@ -45,22 +45,20 @@ defmodule Cloud.Source.Fetcher do
   end
 
   defp fetch_weather do
-    if State.get_mode == :weather do
-      Logger.debug "Fetching weather data from online service"
-      case HTTPoison.get(api_url()) do
-        {:ok, response} ->
-          case Poison.decode(response.body) do
-            {:ok, payload} ->
-              [weather] = payload["weather"]
-              system  = payload["sys"]
-              clouds  = payload["clouds"]
-              parse_weather_data(weather["id"], system["sunrise"], system["sunset"], clouds["all"])
-            {:error, _} ->
-              Logger.error "Failed to decode weather data"
-          end
-        {:error, _} ->
-          Logger.error "Failed to fetch weather data"
-      end
+    Logger.debug "Fetching weather data from online service"
+    case HTTPoison.get(api_url()) do
+      {:ok, response} ->
+        case Poison.decode(response.body) do
+          {:ok, payload} ->
+            [weather] = payload["weather"]
+            system  = payload["sys"]
+            clouds  = payload["clouds"]
+            parse_weather_data(weather["id"], system["sunrise"], system["sunset"], clouds["all"])
+          {:error, _} ->
+            Logger.error "Failed to decode weather data"
+        end
+      {:error, _} ->
+        Logger.error "Failed to fetch weather data"
     end
   end
 
@@ -91,7 +89,7 @@ defmodule Cloud.Source.Fetcher do
         %{weather: weather, intensity: intensity}
     end
     
-    State.set_state(:weather, weather_info)
+    Keeper.set_weather(weather_info)
   end
 
   defp api_url do

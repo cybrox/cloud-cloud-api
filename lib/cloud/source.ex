@@ -15,6 +15,7 @@ defmodule Cloud.Source do
   def init([]) do
     children = [
       worker(Cloud.Source.Fetcher, []),
+      worker(Cloud.Source.Keeper, []),
       worker(Cloud.Source.State, [])
     ]
 
