@@ -9,10 +9,10 @@ defmodule Cloud.Source.Fetcher do
   alias Cloud.Source.Keeper
   alias Cloud.Weather
 
-  @fetch_interval 10 * (60 * 1000)
-  @initial_delay 10_000
+  @fetch_interval 10 * (60 * 1000)   # 10 minutes
+  @initial_delay 30 * 1000           # 30 seconds
 
-  @sun_transition_duration 40 * 60#s
+  @sun_transition_duration 40 * 60   # 40 seconds
 
 
   def start_link do
