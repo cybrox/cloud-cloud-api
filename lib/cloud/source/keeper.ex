@@ -8,7 +8,8 @@ defmodule Cloud.Source.Keeper do
   """
 
   def start_link() do
-    GenServer.start_link(__MODULE__, %{}, name: __MODULE__)
+    clear_sky = %{weather: 3, intensity: 9}
+    GenServer.start_link(__MODULE__, clear_sky, name: __MODULE__)
   end
 
   def set_weather(weather) do
