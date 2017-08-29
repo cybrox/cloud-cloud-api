@@ -74,6 +74,10 @@ defmodule Cloud.Web.Router do
         |> send_resp(302, "Going back home")
         |> halt()
       end
+    else
+      conn
+      |> send_resp(400, "Expected file!")
+      |> halt()
     end
   end
 
