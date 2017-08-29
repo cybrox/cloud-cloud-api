@@ -13,7 +13,7 @@ defmodule Cloud.Source.Fetcher do
   @initial_delay 30 * 1000           # 30 seconds
 
   @sun_transition_duration 40 * 60   # 40 seconds
-  @dummy_mode true                  # Dummy mode (no online requests)
+  @dummy_mode false                  # Dummy mode (no online requests)
 
 
   def start_link do
