@@ -9,7 +9,7 @@ defmodule Cloud.Web.Router do
   plug BasicAuth, use_config: {:cloud, :basic_auth}
   plug Plug.Static, at: "/", from: {:cloud, "priv/static"}
   plug :match
-  plug Plug.Parsers, parsers: [:urlencoded, :multipart]
+  plug Plug.Parsers, parsers: [:json, :urlencoded, :multipart], json_decoder: Poison
   plug :dispatch
 
   # API redirection for serving static file on index
@@ -34,9 +34,7 @@ defmodule Cloud.Web.Router do
 
   # API endpoint for webinterface
   post "/config" do
-    {:ok, params, conn} = Plug.Parsers.JSON.parse(conn, "application", "json", %{}, json_decoder: Poison)
-
-    params = for {key, val} <- params, into: %{}, do: {String.to_atom(key), val}
+    params = for {key, val} <- conn.params, into: %{}, do: {String.to_atom(key), val}
 
     case params.mode do
       0 -> State.set_state(:off, params)
@@ -45,7 +43,7 @@ defmodule Cloud.Web.Router do
       _ -> Logger.error "Received unknown mode"
     end
 
-    send_resp(conn, 200, "")
+    send_resp(conn, 200, "OK")
   end
 
   # API endpoint for resetting device
