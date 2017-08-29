@@ -64,7 +64,7 @@ defmodule Cloud.Web.Router do
         |> send_resp(400, "I don't like this file!")
         |> halt()
       else
-        File.cp(binfile.path, "./priv/static/firmware.bin")
+        File.cp(binfile.path, to_string(:code.priv_dir(:cloud)) <> "/static/firmware.bin")
 
         Logger.debug "Sending update request to device!"
         Dispatcher.send_display_state(%{command: :update})
