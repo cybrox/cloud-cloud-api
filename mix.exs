@@ -24,7 +24,7 @@ defmodule Cloud.Mixfile do
   defp deps do
     [
       {:cowboy, "~> 1.1"},
-      {:plug, "~> 1.3"},
+      {:plug, "~> 1.4.3"},
       {:poison, "~> 3.1"},
       {:httpoison, "~> 0.12.0"},
       {:socket, "~> 0.3.12"},
