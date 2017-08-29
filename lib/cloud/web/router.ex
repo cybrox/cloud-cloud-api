@@ -59,7 +59,7 @@ defmodule Cloud.Web.Router do
     binfile = conn.params["binfile"]
     if binfile != nil do
       {:ok, info} = File.stat binfile.path
-      if Map.get(info, :size, 0) > 500_000 do
+      if Map.get(info, :size, 0) > 3_000_000 do
         conn
         |> send_resp(400, "I don't like this file!")
         |> halt()
