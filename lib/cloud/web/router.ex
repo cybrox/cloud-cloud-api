@@ -43,6 +43,10 @@ defmodule Cloud.Web.Router do
       _ -> Logger.error "Received unknown mode"
     end
 
+    socket_params = %{type: "state", data: params}
+    encoded_params = Poison.encode!(socket_params)
+    Cloud.Socket.Interfacer.fanout_message({:text, encoded_params})
+
     send_resp(conn, 200, "OK")
   end
 

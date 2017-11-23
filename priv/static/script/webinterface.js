@@ -1,6 +1,6 @@
 function sendConfigurationRequest(parameters) {
   console.log("Sending updates to server!");
-  sendSocketUpdate(parameters);
+  // sendSocketUpdate(parameters);
 
   $.ajax({
     type: "POST",
@@ -114,6 +114,8 @@ function sendSocketUpdate(parameters) {
 
 
 $(document).ready(function() {
+  window.lockSliders = false;
+
   // Set up rangeslider sliders
   var willDebounceChange = false
   $('input[type="range"]').rangeslider({polyfill: false});
@@ -133,7 +135,7 @@ $(document).ready(function() {
 
     // Set up listener for slider changes
     $('input[type="range"]').change(function() {
-      if (willDebounceChange == false) {
+      if (!willDebounceChange && !window.lockSliders) {
         updatePreview(getColorSliders());
         setManualDisplay(getColorSliders(), 0);
       }
@@ -184,7 +186,9 @@ $(document).ready(function() {
       }
 
       if (mode == 2) {
+        window.lockSliders = true;
         setColorSliders(payload.data.color);
+        window.lockSliders = false;
         setWebinterfaceMode("manual", true);
         return;
       }

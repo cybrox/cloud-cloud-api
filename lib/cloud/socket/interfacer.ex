@@ -15,6 +15,10 @@ defmodule Cloud.Socket.Interfacer do
     GenServer.start_link(__MODULE__, @initial_state, name: __MODULE__)
   end
 
+  def fanout_message(message) do
+    Process.send(__MODULE__, {:receive_message, nil, message}, [])
+  end
+
 
   def init(state) do
     syncer_port = Application.get_env(:cloud, :syncer_port)
