@@ -63,12 +63,12 @@ defmodule Cloud.Socket.Interfacer do
     will_quit = case Socket.Web.recv(client) do
       {:ok, packet} ->
         case packet do
-          {:text, _, _} ->
-            Process.send(__MODULE__, {:receive_message, client, packet}, [])
-            false
           {:close, _, _} ->
             Process.send(__MODULE__, {:remove_client, client}, [])
             true
+          _ ->
+            Process.send(__MODULE__, {:receive_message, client, packet}, [])
+            false
         end
       {:error, _} ->
         false
