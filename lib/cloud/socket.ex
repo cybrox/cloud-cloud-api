@@ -16,7 +16,8 @@ defmodule Cloud.Socket do
     children = [
       worker(Cloud.Socket.Heartbeat, []),
       worker(Cloud.Socket.Dispatcher, []),
-      worker(Cloud.Socket.Acceptor, [])
+      worker(Cloud.Socket.Acceptor, []),
+      worker(Cloud.Socket.Interfacer, [])
     ]
 
     supervise(children, strategy: :one_for_all, max_restarts: 20, max_seconds: 1)
