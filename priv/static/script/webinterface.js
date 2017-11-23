@@ -156,7 +156,7 @@ $(document).ready(function() {
   });
 
   // Set up websocket connection for persistent updates
-  window.ws = new WebSocket("ws://localhost:6662");
+  window.ws = new WebSocket('ws://' + window.location.hostname + ':6662');
 
   window.ws.onopen = function() { console.log('Opened socket connection'); }
 
