@@ -36,6 +36,11 @@ defmodule Cloud.Socket.Interfacer do
     {:noreply, %{state | clients: [client | state.clients]}}
   end
 
+  def handle_info({:remove_client, client}, state) do
+    Logger.debug "Removing existing client from syncer client list"
+    {:noreply, %{state | clients: state.clients -- [client]}}
+  end
+
   def handle_info({:receive_message, from, message}, state) do
     Logger.debug "Received message on syncer socket"
     fanout_clients = state.clients -- [from]
@@ -55,13 +60,20 @@ defmodule Cloud.Socket.Interfacer do
   end
 
   def await_message_on_connection(client) do
-    case Socket.Web.recv(client) do
+    will_quit = case Socket.Web.recv(client) do
       {:ok, packet} ->
-        Process.send(__MODULE__, {:receive_message, client, packet}, [])
+        case packet do
+          {:text, _, _} ->
+            Process.send(__MODULE__, {:receive_message, client, packet}, [])
+            false
+          {:close, _, _} ->
+            Process.send(__MODULE__, {:remove_client, client}, [])
+            true
+        end
       {:error, _} ->
-        nil
+        false
     end
 
-    await_message_on_connection(client)
+    unless will_quit, do: await_message_on_connection(client)
   end
 end
