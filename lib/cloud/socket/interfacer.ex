@@ -36,9 +36,10 @@ defmodule Cloud.Socket.Interfacer do
     {:noreply, %{state | clients: [client | state.clients]}}
   end
 
-  def handle_info({:receive_message, message}, state) do
+  def handle_info({:receive_message, from, message}, state) do
     Logger.debug "Received message on syncer socket"
-    Enum.each(state.clients, fn(client) ->
+    fanout_clients = state.clients -- [from]
+    Enum.each(fanout_clients, fn(client) ->
       Socket.Web.send(client, message)
     end)
     {:noreply, state}
@@ -56,7 +57,7 @@ defmodule Cloud.Socket.Interfacer do
   def await_message_on_connection(client) do
     case Socket.Web.recv(client) do
       {:ok, packet} ->
-        Process.send(__MODULE__, {:receive_message, packet}, [])
+        Process.send(__MODULE__, {:receive_message, client, packet}, [])
       {:error, _} ->
         nil
     end
