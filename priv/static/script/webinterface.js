@@ -143,4 +143,41 @@ $(document).ready(function() {
     // Show webinterface content
     $('#content').css('opacity', '1');
   });
+
+  // Set up websocket connection for persistent updates
+  var ws = new WebSocket("ws://localhost:6662");
+
+  ws.onopen = function() { console.log('Opened socket connection'); }
+
+  ws.onmessage = function(event) {
+    try {
+      var information = event.data;
+      var payload = JSON.parse(information);
+      console.log('Changing webinterface state!');
+    } catch(e) {
+      console.log('Received invalid socket information!');
+      return;
+    }
+
+    if (payload.type == "state") {
+      var mode = payload.data.mode;
+
+      if (mode == 0) {
+        setWebinterfaceMode("off");
+        return;
+      }
+
+      if (mode == 1) {
+        setWebinterfaceMode("weather");
+        return;
+      }
+
+      if (mode == 2) {
+        console.log('aads');
+        setWebinterfaceMode("manual");
+        setColorSliders(payload.data.color);
+        return;
+      }
+    }
+  }
 });
