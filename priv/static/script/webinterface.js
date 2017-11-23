@@ -1,5 +1,6 @@
 function sendConfigurationRequest(parameters) {
   console.log("Sending updates to server!");
+  sendSocketUpdate(parameters);
 
   $.ajax({
     type: "POST",
@@ -101,6 +102,16 @@ function showUpdateWindow() {
   $('#update-picker').show();
 }
 
+function sendSocketUpdate(parameters) {
+  if (window.ws === undefined) return;
+
+  var payload = {
+    type: 'state',
+    data: parameters
+  }
+  ws.send(JSON.stringify(payload));
+}
+
 
 $(document).ready(function() {
   // Set up rangeslider sliders
@@ -145,11 +156,11 @@ $(document).ready(function() {
   });
 
   // Set up websocket connection for persistent updates
-  var ws = new WebSocket("ws://localhost:6662");
+  window.ws = new WebSocket("ws://localhost:6662");
 
-  ws.onopen = function() { console.log('Opened socket connection'); }
+  window.ws.onopen = function() { console.log('Opened socket connection'); }
 
-  ws.onmessage = function(event) {
+  window.ws.onmessage = function(event) {
     try {
       var information = event.data;
       var payload = JSON.parse(information);
@@ -173,7 +184,6 @@ $(document).ready(function() {
       }
 
       if (mode == 2) {
-        console.log('aads');
         setWebinterfaceMode("manual");
         setColorSliders(payload.data.color);
         return;
