@@ -48,6 +48,8 @@ The display packets transmitted from the server contain the following informatio
 
 * `command` Command `r` is for device reset
 * `command` Command `u` is for device firmware update
+* `command` Command `d` is for Debug-Messages. 
+  * `State` The state of the Debug-Messages. 1 = On / 0 = Off.
 
 ### Protocol format
 Aside the text ping packets described below (not the ping layer ping packets), all packets sent will have the following format: `[cc:<mode>:<param1>:<param2>]`. Color information will be sent as `r,g,b`. Unknown or unused parameters will be filled with `?`.    
@@ -56,7 +58,8 @@ Example off packet: `[cc:0:?:?]`
 Example weather packet: `[cc:1:2:0]`   
 Example color packet: `[cc:2:255,255,255:0]`     
 Example reset packet: `[cc:r:?:?]`       
-Example update packet: `[cc:u:?:?]`
+Example update packet: `[cc:u:?:?]`   
+Example debug message: `[cc:d:1:?]` 
 
 ### Ensuring connection
 The Server offers a permanent ping/pong handler in order for the client to check its connection. The client can send a ping via websocket with an arbitrary cookie at any time and should receive a pong from the server immediately, if it is still connected.    
