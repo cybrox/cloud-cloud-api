@@ -174,18 +174,18 @@ $(document).ready(function() {
       var mode = payload.data.mode;
 
       if (mode == 0) {
-        setWebinterfaceMode("off");
+        setWebinterfaceMode("off", true);
         return;
       }
 
       if (mode == 1) {
-        setWebinterfaceMode("weather");
+        setWebinterfaceMode("weather", true);
         return;
       }
 
       if (mode == 2) {
-        setWebinterfaceMode("manual");
         setColorSliders(payload.data.color);
+        setWebinterfaceMode("manual", true);
         return;
       }
     }
