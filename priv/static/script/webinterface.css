@@ -74,6 +74,7 @@ body {
     box-shadow: none;
     font-weight: normal;
     transition: background 0.2s ease-in-out;
+    border-radius: 0;
   }
 
     .mode-button.active {
