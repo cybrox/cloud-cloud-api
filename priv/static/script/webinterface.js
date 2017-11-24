@@ -188,6 +188,7 @@ $(document).ready(function() {
       if (mode == 2) {
         window.lockSliders = true;
         setColorSliders(payload.data.color);
+        updatePreview(payload.data.color);
         window.lockSliders = false;
         setWebinterfaceMode("manual", true);
         return;
