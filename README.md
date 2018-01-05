@@ -32,6 +32,7 @@ S > [cc:2:255,65,174:0]
 S > [cc:2:255,162,174:0]
 S > [cc:2:69,162,174:0]
 S > [cc:2:69,162,245:0]
+C > d:This is a Debug-Message
 ```
 
 ### Protocol packets
@@ -64,6 +65,10 @@ Example debug message: `[cc:d:1:?]`
 ### Ensuring connection
 The Server offers a permanent ping/pong handler in order for the client to check its connection. The client can send a ping via websocket with an arbitrary cookie at any time and should receive a pong from the server immediately, if it is still connected.    
 The client can either send a proper websocket ping frame with an appropriate cookie, or just send a text packet with the content `ping` and should receive a text packet with the content `pong`.
+
+### Debug-messages
+When debug-messages ar enabled, the client sends all `ESP_LOGx(TAG, Message);` over Websocket connection.
+Debug messages are leaded by `d:`.
 
 ### Weather states
 * `1` - Sunrise
